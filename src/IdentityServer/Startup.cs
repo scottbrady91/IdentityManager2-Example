@@ -28,7 +28,7 @@ namespace IdentityServer
                 ClientId = "identitymanager2",
                 ClientName = "IdentityManager2",
                 AllowedGrantTypes = GrantTypes.Implicit,
-                RedirectUris = {"http://localhost:5000/signin-oidc"},
+                RedirectUris = {"https://localhost:5000/signin-oidc"},
                 AllowedScopes = {"openid", "profile", "roles"}
             };
 

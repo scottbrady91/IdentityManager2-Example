@@ -2,7 +2,6 @@
 using IdentityManager2.AspNetIdentity;
 using IdentityManager2.Configuration;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +24,8 @@ namespace ScottBrady91.IdentityManager2.Example
                         new SecurityConfiguration
                         {
                             HostAuthenticationType = "cookie",
-                            HostChallengeType = "oidc"
+                            HostChallengeType = "oidc",
+                            AdditionalSignOutType = "oidc"
                         })
                 .AddIdentityMangerService<AspNetCoreIdentityManagerService<IdentityUser, string, IdentityRole, string>>();
 
@@ -36,7 +36,7 @@ namespace ScottBrady91.IdentityManager2.Example
                 .AddCookie("cookie")
                 .AddOpenIdConnect("oidc", opt =>
                 {
-                    opt.Authority = "http://localhost:5001";
+                    opt.Authority = "https://localhost:5001";
                     opt.ClientId = "identitymanager2";
                     
                     // default: openid & profile
@@ -47,13 +47,17 @@ namespace ScottBrady91.IdentityManager2.Example
                 });
         }
         
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
             app.UseDeveloperExceptionPage();
+            app.UseRouting();
 
             app.UseAuthentication();
-
+            app.UseAuthorization();
+            
             app.UseIdentityManager();
+
+            app.UseEndpoints(builder => builder.MapDefaultControllerRoute());
         }
     }
 }
